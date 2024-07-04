@@ -8,42 +8,48 @@
     <link href="signin.css" rel="stylesheet"/>
     <a href="index.html" class="nav-item nav-link active"></a>
     <script type="text/javascript">
-      function login(){
-        const form = document.getElementById('loginform');
-    var apiUrl = 'http://localhost:3000/auth/login';
-    fetch(apiUrl, { 
-    
-    // Adding method type 
-    method: "POST", 
-    
-    // Adding body or contents to send 
-    body: JSON.stringify({ 
-      "email":form.email.value,
-      "password":form.password.value,
-    }), 
-    
-    // Adding headers to the request 
-    headers: { 
-      "Content-type": "application/json; charset=UTF-8"
-    } 
-  }) 
-  
-  // Converting to JSON 
-  .then(response =>{
-    if (response) {
-   alert("User logged in sucessfully")
-   window.location.href = "index.html";
-  } 
-  
-  } ) }
-    </script>
+      function login() {
+          const form = document.getElementById('loginform');
+          if (form.email.value && form.password.value) {
+            var apiUrl = 'http://localhost:3000/auth/login';
+            fetch(apiUrl, {
+
+              // Adding method type 
+              method: "POST",
+
+              // Adding body or contents to send 
+              body: JSON.stringify({
+                "email": form.email.value,
+                "password": form.password.value,
+              }),
+
+              // Adding headers to the request 
+              headers: {
+                "Content-type": "application/json; charset=UTF-8"
+              }
+            }).then(response=> {
+              return response.json();
+              }).then(json =>{
+                if (json.token) {
+                  alert("User logged in sucessfully")
+                  window.location.href = "index.html";
+                }else{
+                  alert(json.message)
+                }
+              } )
+          }else{
+            return alert('please enter all required fields')
+          }
+        }
+      
+   </script>
 </head>
 <body>
   <div class="container">
     <div class="card">
       <h2>Login</h2>
       <form id="loginform">
-        <input type="email" id="email" name="email" placeholder="Email" required>
+        <input type="text" id="email" name="email" placeholder="Email" required>
         <input type="password" id="password" name="password" placeholder="Password" required>
         <button type="button" onclick="login()">Login</button>
       </form>

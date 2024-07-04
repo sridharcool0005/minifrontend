@@ -10,38 +10,41 @@
     <script type="text/javascript">
     function register(){
       const form = document.getElementById('regform');
-    console.log(form.username.value);
-  var apiUrl = 'http://localhost:3000/auth/register';
-  fetch(apiUrl, { 
-	
-	// Adding method type 
-	method: "POST", 
-	
-	// Adding body or contents to send 
-	body: JSON.stringify({ 
-    "role":"admin",
-    "email":form.email.value,
-    "password":form.password.value,
-    "fullName":form.username.value
-	}), 
-	
-	// Adding headers to the request 
-	headers: { 
-		"Content-type": "application/json; charset=UTF-8"
-	} 
-}) 
+      if (form.email.value && form.password.value && form.username.value) {
+        var apiUrl = 'http://localhost:3000/auth/register';
+        fetch(apiUrl, {
 
-// Converting to JSON 
-.then(response =>{
-  if (response) {
- alert("User Registered sucessfully")
- window.location.href = "signin.html";
-} 
+          // Adding method type 
+          method: "POST",
 
-} ) 
-
-// Displaying results to console 
-.then(json => console.log(json));}
+          // Adding body or contents to send 
+          body: JSON.stringify({
+            "role": "admin",
+            "email": form.email.value,
+            "password": form.password.value,
+            "fullName": form.username.value
+          }),
+          // Adding headers to the request 
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        })
+          // Converting to JSON 
+          .then(response => {
+            return response.json();
+          }).then(json =>{
+            console.log(json)
+                if (json._id) {
+                  alert("User Registered sucessfully")
+                  window.location.href = "signin.html";
+                }else{
+                  alert(json)
+                }
+              } )
+      } else {
+return alert('please enter all required fields')
+      }
+    }
   </script>
 </head>
 <body>
@@ -53,7 +56,7 @@
           <label for="username"><b>Username</b></label>
           <input type="text" id="username" name="username" placeholder="Enter Username" required>
           <label for="email"><b>Email</b></label>
-          <input type="email" placeholder="Enter Email" id="email" name="email" required>
+          <input type="text" placeholder="Enter Email" id="email" name="email" required>
           
           <label for="psw"><b>Password</b></label>
           <input type="password" id="password" placeholder="Enter Password" name="password" required>
